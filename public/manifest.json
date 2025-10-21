@@ -1,0 +1,14 @@
+{
+  "name": "PT. Nawasena Kreasi Teknologi - Company Profile",
+  "short_name": "IT Solutions",
+  "description": "Leading provider of innovative IT solutions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [],
+  "categories": ["business", "technology"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

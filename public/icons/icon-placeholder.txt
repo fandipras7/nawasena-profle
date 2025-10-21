@@ -1,0 +1,1 @@
+Icon placeholder files need to be created manually for PWA
