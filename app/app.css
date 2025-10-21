@@ -119,6 +119,130 @@ body {
   transform: translateY(0);
 }
 
+/* Enhanced lazy loading animations */
+.lazy-container {
+  position: relative;
+  min-height: 200px; /* Prevent layout shift */
+}
+
+.lazy-content {
+  opacity: 0;
+  transform: translateY(60px) scale(0.9);
+  transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+
+.lazy-content.lazy-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Prevent flashing of unstyled content */
+.lazy-container:not(.loaded) {
+  visibility: hidden;
+}
+
+.lazy-container.loaded {
+  visibility: visible;
+}
+
+/* Staggered animation for child elements */
+.lazy-visible > *:nth-child(1) { 
+  animation: slideUpReveal 0.8s ease-out 0.1s both;
+}
+.lazy-visible > *:nth-child(2) { 
+  animation: slideUpReveal 0.8s ease-out 0.2s both;
+}
+.lazy-visible > *:nth-child(3) { 
+  animation: slideUpReveal 0.8s ease-out 0.3s both;
+}
+.lazy-visible > *:nth-child(4) { 
+  animation: slideUpReveal 0.8s ease-out 0.4s both;
+}
+.lazy-visible > *:nth-child(5) { 
+  animation: slideUpReveal 0.8s ease-out 0.5s both;
+}
+
+@keyframes slideUpReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ScrollReveal Animation - Smooth and subtle */
+.scroll-reveal-container {
+  position: relative;
+}
+
+.scroll-reveal-content {
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal-content.scroll-hidden {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+}
+
+.scroll-reveal-content.scroll-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Subtle staggered animation for child elements */
+.scroll-revealed > * {
+  animation: fadeInUp 0.9s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-revealed > *:nth-child(1) { animation-delay: 0.05s; }
+.scroll-revealed > *:nth-child(2) { animation-delay: 0.1s; }
+.scroll-revealed > *:nth-child(3) { animation-delay: 0.15s; }
+.scroll-revealed > *:nth-child(4) { animation-delay: 0.2s; }
+.scroll-revealed > *:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .lazy-content {
+    transition: opacity 0.3s ease;
+    transform: none;
+  }
+  
+  .lazy-visible > * {
+    animation: none;
+  }
+  
+  .scroll-reveal-content {
+    transition: opacity 0.3s ease;
+  }
+  
+  .scroll-reveal-content.hidden {
+    transform: none;
+  }
+  
+  .scroll-reveal-content.revealed {
+    transform: none;
+  }
+}
+
 /* Custom scrollbar for better UX */
 ::-webkit-scrollbar {
   width: 8px;

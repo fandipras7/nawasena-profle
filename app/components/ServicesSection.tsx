@@ -1,3 +1,6 @@
+import React, { useMemo, useState } from "react";
+import FadeIn from "./FadeIn";
+
 interface Service {
   title: string;
   description: string;
@@ -13,18 +16,18 @@ interface ServicesSectionProps {
 }
 
 export default function ServicesSection({
-  title = "Our Services",
-  subtitle = "Comprehensive IT solutions tailored to your business needs",
+  title = "Services, shaped for outcomes",
+  subtitle = "We prefer surgical scopes, short cycles, and measurable impact.",
   services = [
     {
       title: "Web Development",
       description:
-        "Custom web applications built with modern technologies for optimal performance and user experience.",
+        "Custom web apps with accessible UI, strong states, and clean data flows.",
       features: [
-        "Responsive Design",
-        "Progressive Web Apps",
-        "E-commerce Solutions",
-        "Content Management Systems",
+        "Responsive by default",
+        "SSR/ISR where it matters",
+        "Auth + roles",
+        "CMS or headless",
       ],
       icon: "🌐",
       color: "primary",
@@ -32,219 +35,304 @@ export default function ServicesSection({
     {
       title: "Mobile Development",
       description:
-        "Native and cross-platform mobile applications that engage users and drive business growth.",
-      features: [
-        "iOS Development",
-        "Android Development",
-        "React Native",
-        "Flutter Apps",
-      ],
+        "Pragmatic native or cross‑platform builds focused on core journeys.",
+      features: ["iOS/Android", "React Native", "Offline first", "Store ops"],
       icon: "📱",
       color: "green",
     },
     {
       title: "Cloud Solutions",
       description:
-        "Scalable cloud infrastructure and migration services to modernize your IT operations.",
-      features: [
-        "Cloud Migration",
-        "AWS/Azure/GCP",
-        "DevOps Implementation",
-        "Monitoring & Security",
-      ],
+        "Scalable infra with sensible observability, security, and costs.",
+      features: ["ECS/Fargate", "CI/CD", "Monitoring", "IaC"],
       icon: "☁️",
       color: "purple",
     },
     {
       title: "Data Analytics",
       description:
-        "Transform your data into actionable insights with advanced analytics and visualization tools.",
-      features: [
-        "Business Intelligence",
-        "Data Visualization",
-        "Predictive Analytics",
-        "Big Data Processing",
-      ],
+        "From raw to readable: pipelines, metrics, and decision‑ready dashboards.",
+      features: ["BI setup", "dbt/ELT", "Dashboards", "Forecasts"],
       icon: "📊",
       color: "orange",
     },
-    // {
-    //   title: "Cybersecurity",
-    //   description:
-    //     "Comprehensive security solutions to protect your digital assets and ensure compliance.",
-    //   features: [
-    //     "Security Audits",
-    //     "Penetration Testing",
-    //     "Compliance Management",
-    //     "Incident Response",
-    //   ],
-    //   icon: "🔐",
-    //   color: "red",
-    // },
     {
       title: "IT Consulting",
       description:
-        "Strategic technology consulting to align IT initiatives with your business objectives.",
+        "Strategy, audits, and roadmaps that balance delivery and risk.",
       features: [
-        "Digital Transformation",
-        "Technology Strategy",
-        "System Integration",
-        "Process Optimization",
+        "Tech due‑diligence",
+        "Architecture",
+        "Team enablement",
+        "Playbooks",
       ],
       icon: "💼",
       color: "indigo",
     },
-    // NEW: Kids Coding Classes
     {
       title: "Kids Coding Classes",
       description:
-        "Fun, project-based programming classes for children to build logic, creativity, and confidence.",
+        "Project‑based classes to build logic, creativity, and confidence.",
       features: [
-        "Scratch & Block Coding",
-        "Intro to JavaScript",
-        "STEM Mini Projects",
-        "Safe & Engaging Curriculum",
+        "Scratch basics",
+        "Intro JS",
+        "STEM mini‑projects",
+        "Safe, fun lessons",
       ],
       icon: "🎒",
       color: "gold",
     },
   ],
 }: ServicesSectionProps) {
-  // Tailwind-native color map (pakai token primary & secondary)
-  const getColorClasses = (color: string) => {
-    const colorMap = {
-      primary:
-        "bg-primary-50 text-primary-600 border-primary-200 hover:bg-primary-100",
-      gold: "bg-secondary-50 text-secondary-600 border-secondary-200 hover:bg-secondary-100",
-      blue: "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100",
-      green: "bg-green-50 text-green-600 border-green-200 hover:bg-green-100",
-      purple:
-        "bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100",
-      orange:
-        "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-100",
-      red: "bg-red-50 text-red-600 border-red-200 hover:bg-red-100",
-      indigo:
-        "bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100",
+  const [active, setActive] = useState(services[0]?.title ?? "");
+
+  const colorClasses = (c: string) => {
+    const map = {
+      primary: {
+        badge: "bg-primary-50 text-primary-700 ring-primary-200",
+        border: "border-primary-200",
+        hover: "hover:bg-primary-50",
+        dot: "bg-primary-600",
+        link: "text-primary-700 hover:text-secondary-600",
+      },
+      gold: {
+        badge: "bg-secondary-50 text-secondary-700 ring-secondary-200",
+        border: "border-secondary-200",
+        hover: "hover:bg-secondary-50",
+        dot: "bg-secondary-500",
+        link: "text-secondary-700 hover:text-secondary-600",
+      },
+      blue: {
+        badge: "bg-blue-50 text-blue-700 ring-blue-200",
+        border: "border-blue-200",
+        hover: "hover:bg-blue-50",
+        dot: "bg-blue-600",
+        link: "text-blue-700 hover:text-blue-600",
+      },
+      green: {
+        badge: "bg-green-50 text-green-700 ring-green-200",
+        border: "border-green-200",
+        hover: "hover:bg-green-50",
+        dot: "bg-green-600",
+        link: "text-green-700 hover:text-green-600",
+      },
+      purple: {
+        badge: "bg-purple-50 text-purple-700 ring-purple-200",
+        border: "border-purple-200",
+        hover: "hover:bg-purple-50",
+        dot: "bg-purple-600",
+        link: "text-purple-700 hover:text-purple-600",
+      },
+      orange: {
+        badge: "bg-orange-50 text-orange-700 ring-orange-200",
+        border: "border-orange-200",
+        hover: "hover:bg-orange-50",
+        dot: "bg-orange-600",
+        link: "text-orange-700 hover:text-orange-600",
+      },
+      red: {
+        badge: "bg-red-50 text-red-700 ring-red-200",
+        border: "border-red-200",
+        hover: "hover:bg-red-50",
+        dot: "bg-red-600",
+        link: "text-red-700 hover:text-red-600",
+      },
+      indigo: {
+        badge: "bg-indigo-50 text-indigo-700 ring-indigo-200",
+        border: "border-indigo-200",
+        hover: "hover:bg-indigo-50",
+        dot: "bg-indigo-600",
+        link: "text-indigo-700 hover:text-indigo-600",
+      },
     } as const;
-    return colorMap[(color as keyof typeof colorMap) ?? "primary"];
+    return map[(c as keyof typeof map) ?? "primary"];
   };
 
+  const activeService = useMemo(
+    () => services.find((s) => s.title === active) ?? services[0],
+    [services, active]
+  );
+
   return (
-    <section id="services" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            {title}
-          </h2>
-          <p className="text-lg lg:text-xl text-gray-700 max-w-3xl mx-auto">
-            {subtitle}
-          </p>
-          <div className="w-24 h-1 bg-secondary-400 mx-auto mt-6 rounded-full" />
-        </div>
+    <section id="services" className="relative w-full bg-white py-20 sm:py-24">
+      {/* hairline */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent" />
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
-            >
-              {/* Service Icon */}
-              <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-lg mb-6 border-2 transition-all duration-300 ${getColorClasses(service.color)}`}
-              >
-                <span className="text-2xl">{service.icon}</span>
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Header: left‑aligned, understated */}
+        <FadeIn>
+          <div className="max-w-3xl">
+            <h2 className="text-pretty text-3xl font-semibold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+              {title}
+            </h2>
+            <p className="mt-3 text-lg leading-8 text-gray-700">{subtitle}</p>
+          </div>
+        </FadeIn>
+
+        {/* Layout: Sidebar list (sticky) + Detail panel */}
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-12">
+          {/* Sidebar */}
+          <FadeIn direction="left" delay={100} className="md:col-span-5 lg:col-span-4">
+            <aside>
+              <div className="sticky top-24 space-y-3">
+                {services.map((s, index) => {
+                  const c = colorClasses(s.color);
+                  const isActive = active === s.title;
+                  return (
+                    <FadeIn key={s.title} delay={index * 50} direction="up">
+                      <button
+                        onClick={() => setActive(s.title)}
+                        className={`group w-full rounded-xl border p-4 text-left transition-colors ${
+                          isActive
+                            ? `${c.border} bg-white shadow-sm`
+                            : `border-gray-200 ${c.hover}`
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`mt-1 size-2.5 shrink-0 rounded-full ${c.dot}`}
+                          />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg">{s.icon}</span>
+                              <h3 className="text-base font-semibold text-gray-900">
+                                {s.title}
+                              </h3>
+                            </div>
+                            <p className="mt-1 line-clamp-2 text-sm text-gray-600">
+                              {s.description}
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    </FadeIn>
+                  );
+                })}
               </div>
+            </aside>
+          </FadeIn>
 
-              {/* Service Content */}
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                {service.title}
-              </h3>
+          {/* Detail panel */}
+          <FadeIn direction="right" delay={200} className="md:col-span-7 lg:col-span-8">
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              {/* accent ribbon */}
+              <div className="absolute -top-1 left-0 h-1 w-40 bg-secondary-400" />
 
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {service.description}
-              </p>
+              <div className="flex flex-col gap-6 lg:flex-row">
+                <div className="grow">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-200">
+                    <span>Selected service</span>
+                  </div>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className="text-2xl">{activeService.icon}</span>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {activeService.title}
+                    </h3>
+                  </div>
+                  <p className="mt-2 max-w-2xl text-gray-700">
+                    {activeService.description}
+                  </p>
 
-              {/* Features List */}
-              <ul className="space-y-2">
-                {service.features.map((feature, featureIndex) => (
-                  <li
-                    key={featureIndex}
-                    className="flex items-center text-sm text-gray-700"
-                  >
-                    <svg
-                      className="w-4 h-4 text-primary-600 mr-3 shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                  {/* features */}
+                  <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {activeService.features.map((f) => (
+                      <li
+                        key={f}
+                        className="flex items-start gap-2 text-sm text-gray-800"
+                      >
+                        <svg
+                          className="mt-0.5 size-4 text-primary-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-3">
+                    <a
+                      href="#contact"
+                      className="rounded-full bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:translate-y-[-2px] hover:bg-primary-800"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+                      Discuss this scope
+                    </a>
+                    <a
+                      href="#portfolio"
+                      className="text-sm font-semibold text-gray-800 underline-offset-4 hover:underline"
+                    >
+                      See similar work
+                    </a>
+                  </div>
+                </div>
 
-              {/* Learn More Button */}
-              <div className="mt-6">
+                {/* vignette card */}
+                <div className="min-w-[260px] max-w-sm shrink-0 rounded-xl border border-gray-200 bg-gray-50 p-4">
+                  <div className="text-sm font-semibold text-gray-800">
+                    Typical deliverables
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                    <li>• Scope doc & acceptance</li>
+                    <li>• UI flows & empty states</li>
+                    <li>• CI/CD + envs</li>
+                    <li>• Observability hooks</li>
+                  </ul>
+                  <div className="mt-4 rounded-lg bg-white p-3 text-xs text-gray-700 ring-1 ring-gray-200">
+                    <div className="font-semibold text-gray-900">
+                      Example API
+                    </div>
+                    <pre className="mt-1 overflow-x-auto">
+                      {`POST /v1/${activeService.title.toLowerCase().replace(/\s/g, "-")}/estimate\nHost: api.nawasena.dev\nX-Signature: hmac-sha256...`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Process strip */}
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-4">
+              <div className="mb-2 text-sm font-semibold text-gray-800">
+                Our process
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {["Scope", "Design", "Build", "Deploy"].map((s, i) => (
+                  <div
+                    key={s}
+                    className="rounded-lg bg-gray-50 p-3 text-center text-sm font-medium text-gray-700"
+                  >
+                    {i + 1}. {s}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA band */}
+            <div className="mt-8 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 p-6 text-white">
+              <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <div className="text-lg font-semibold">
+                    Have a specific brief?
+                  </div>
+                  <p className="text-primary-100">
+                    Send context, constraints, and a timeline — we’ll reply with
+                    a path and estimate.
+                  </p>
+                </div>
                 <a
                   href="#contact"
-                  className="inline-flex items-center text-primary-600 hover:text-secondary-600 font-medium transition-colors duration-200"
+                  className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-primary-900 hover:bg-primary-50"
                 >
-                  Learn More
-                  <svg
-                    className="ml-2 w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
+                  Get a quick estimate
                 </a>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <div className="bg-white rounded-2xl p-8 lg:p-12 shadow-lg">
-            <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-              Ready to Transform Your Business?
-            </h3>
-            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-              Let's discuss how our expertise can help you achieve your
-              technology goals and drive business growth.
-            </p>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            >
-              Get Free Consultation
-              <svg
-                className="ml-2 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>
