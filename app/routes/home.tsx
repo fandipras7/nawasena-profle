@@ -6,7 +6,7 @@ import PortfolioSection from "../components/PortfolioSection";
 import TeamSection from "../components/TeamSection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
-import LazyLoad from "../components/LazyLoad";
+import ScrollReveal from "../components/ScrollReveal";
 import SEO, { companyStructuredData } from "../components/SEO";
 import PerformanceMonitor from "../components/PerformanceMonitor";
 
@@ -33,21 +33,11 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
-        <LazyLoad>
-          <AboutSection />
-        </LazyLoad>
-        <LazyLoad>
-          <ServicesSection />
-        </LazyLoad>
-        <LazyLoad>
-          <PortfolioSection />
-        </LazyLoad>
-        <LazyLoad>
-          <TeamSection />
-        </LazyLoad>
-        <LazyLoad>
-          <ContactSection />
-        </LazyLoad>
+        <AboutSection />
+        <ServicesSection />
+        <PortfolioSection />
+        <TeamSection />
+        <ContactSection />
       </main>
       <Footer />
     </div>

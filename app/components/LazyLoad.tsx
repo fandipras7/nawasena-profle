@@ -13,7 +13,7 @@ export default function LazyLoad({
   children,
   className = "",
   threshold = 0.1,
-  rootMargin = "50px",
+  rootMargin = "100px",
   placeholder
 }: LazyLoadProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,8 +24,13 @@ export default function LazyLoad({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasLoaded) {
-          setIsVisible(true);
           setHasLoaded(true);
+          // Small delay to ensure smooth animation
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              setIsVisible(true);
+            }, 150);
+          });
           observer.disconnect();
         }
       },
@@ -48,17 +53,18 @@ export default function LazyLoad({
   }, [threshold, rootMargin, hasLoaded]);
 
   return (
-    <div ref={elementRef} className={className}>
-      {isVisible ? (
-        <div className="fade-in visible">
+    <div 
+      ref={elementRef} 
+      className={`lazy-container ${hasLoaded ? 'loaded' : ''} ${className}`}
+    >
+      {hasLoaded ? (
+        <div className={`lazy-content ${isVisible ? 'lazy-visible' : ''}`}>
           {children}
         </div>
       ) : (
-        placeholder || (
-          <div className="min-h-96 bg-gray-100 animate-pulse flex items-center justify-center">
-            <div className="text-gray-400">Loading...</div>
-          </div>
-        )
+        <div className="w-full h-96 bg-transparent">
+          {/* Placeholder untuk mencegah layout shift */}
+        </div>
       )}
     </div>
   );

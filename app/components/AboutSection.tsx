@@ -1,181 +1,144 @@
+import React from "react";
+import FadeIn from "./FadeIn";
+
+/**
+ * About section — revised layout (distinct from Hero)
+ * - Centered header
+ * - Value cards in a 3‑up row
+ * - Split section: horizontal steps timeline (L) + founder note (R)
+ * - Compact highlights ledger under it
+ * - Removed "Trusted by" block per request
+ */
 interface AboutSectionProps {
+  eyebrow?: string;
   title?: string;
   description?: string;
-  features?: Array<{
-    title: string;
-    description: string;
-    icon: string;
-  }>;
+  values?: Array<{ label: string; detail: string }>; // core principles
+  highlights?: Array<{ k: string; v: string }>; // quick stats
 }
 
 export default function AboutSection({
-  title = "About Our Company",
-  description = "In our company, there are three values that we hold in high regard. One Team which means strong team unity, One Passion which means we promise to always be passionate in innovating, and One Purpose which is the combination of both values, where the unity and passion we have will help us reach our goal—delivering the best results.",
-  features = [
+  eyebrow = "ABOUT",
+  title = "We build calmly, ship reliably",
+  description = "Nawasena is a small engineering studio focused on thoughtful web apps and back‑office tools. We obsess over the boring parts—accessibility, states, observability—so your team can move faster with fewer surprises.",
+  values = [
     {
-      title: "Innovation First",
-      description:
-        "We stay ahead of technology trends to provide cutting-edge solutions that give you a competitive advantage.",
-      icon: "💡",
+      label: "One Team",
+      detail: "We embed with your squad and keep the bus factor high.",
     },
     {
-      title: "Expert Team",
-      description:
-        "Our certified professionals bring years of experience across various technologies and industries.",
-      icon: "👥",
+      label: "One Passion",
+      detail: "Care for craft, tests, docs, and developer experience.",
     },
     {
-      title: "Quality Assurance",
-      description:
-        "We follow rigorous testing and quality control processes to ensure reliable and robust solutions.",
-      icon: "✅",
+      label: "One Purpose",
+      detail:
+        "Ship outcomes that matter for the business—quietly and predictably.",
     },
-    {
-      title: "24/7 Support",
-      description:
-        "Round-the-clock technical support to keep your systems running smoothly at all times.",
-      icon: "🛠️",
-    },
+  ],
+  highlights = [
+    { k: "Avg. lead time", v: "7–14 days" },
+    { k: "Incidents Q3", v: "0 Sev‑1" },
+    { k: "Core stack", v: "SvelteKit/Next • Nest • PG" },
   ],
 }: AboutSectionProps) {
   return (
-    <section id="about" className="py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            {title}
-          </h2>
-          <div className="mb-6">
-            <div className="text-xl sm:text-2xl font-semibold text-primary-600 mb-2 tracking-wide">
-              ONE TEAM • ONE PASSION • ONE PURPOSE
-            </div>
-            <div className="w-24 h-1 bg-secondary-400 mx-auto rounded-full" />
-          </div>
-          <p className="text-lg lg:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            {description}
-          </p>
-        </div>
+    <section id="about" className="relative w-full bg-white py-20 sm:py-24">
+      {/* top hairline */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent" />
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="text-center p-6 rounded-xl bg-gray-50 border border-transparent hover:bg-primary-50 hover:border-primary-100 transition-all duration-300 hover:shadow-lg group"
-            >
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {feature.description}
-              </p>
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Header: centered */}
+        <FadeIn>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary-200/60 bg-primary-50/50 px-3 py-1 text-xs font-medium uppercase tracking-wide text-primary-700">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-secondary-400" />{" "}
+              {eyebrow}
             </div>
+            <h2 className="mt-4 text-pretty text-3xl font-semibold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+              {title}
+            </h2>
+            <p className="mx-auto mt-4 max-w-3xl text-balance text-lg leading-8 text-gray-700 sm:text-xl">
+              {description}
+            </p>
+          </div>
+        </FadeIn>
+
+        {/* Values: 3‑up cards */}
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {values.map((v, index) => (
+            <FadeIn key={v.label} delay={index * 100} direction="up">
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 transition-colors hover:border-secondary-300 hover:bg-white">
+                <div className="text-sm font-semibold text-gray-900">
+                  {v.label}
+                </div>
+                <p className="mt-1 text-sm text-gray-600">{v.detail}</p>
+              </div>
+            </FadeIn>
           ))}
         </div>
 
-        {/* Company Stats */}
-        <div className="mt-20 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-8 lg:p-12 text-white">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">99%</div>
-              <div className="text-primary-100">Client Satisfaction</div>
+        {/* Split: horizontal steps + founder note */}
+        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-12">
+          {/* Horizontal steps timeline */}
+          <FadeIn direction="left" delay={100} className="md:col-span-7 lg:col-span-8">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 text-sm font-semibold text-gray-800">
+                How we deliver
+              </div>
+              <ol className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {[
+                  { t: "Discovery", d: "1–3d" },
+                  { t: "Prototype", d: "3–5d" },
+                  { t: "MVP", d: "1–2w" },
+                  { t: "Handover", d: "docs & runbooks" },
+                ].map((s, i) => (
+                  <li
+                    key={i}
+                    className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+                  >
+                    <div className="text-sm font-medium text-gray-900">
+                      {s.t}
+                    </div>
+                    <div className="text-xs text-gray-600">{s.d}</div>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">500+</div>
-              <div className="text-primary-100">Projects Delivered</div>
+          </FadeIn>
+
+          {/* Founder note */}
+          <FadeIn direction="right" delay={200} className="md:col-span-5 lg:col-span-4">
+            <div className="rounded-2xl border border-primary-200 bg-primary-50 p-6">
+              <div className="text-sm font-semibold text-primary-900">
+                A note from the team
+              </div>
+              <p className="mt-2 text-sm leading-6 text-gray-700">
+                We prefer clear constraints, small PRs, and strong defaults.
+                When we say "done", it means instrumented, documented, and
+                deployed.
+              </p>
             </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">15+</div>
-              <div className="text-primary-100">Technology Partners</div>
-            </div>
-          </div>
+          </FadeIn>
         </div>
 
-        {/* Vision & Mission */}
-        <div className="mt-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Our Vision & Mission
-            </h3>
-            <div className="w-24 h-1 bg-secondary-400 mx-auto rounded-full" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Vision Card */}
-            <div className="relative bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-8 text-white overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12" />
-              <div className="relative z-10">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold">Our Vision</h4>
+        {/* Highlights ledger (distinct visual) */}
+        <FadeIn delay={300}>
+          <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6">
+            <dl className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
+              {highlights.map((h) => (
+                <div key={h.k} className="">
+                  <dt className="text-xs uppercase tracking-wide text-gray-500">
+                    {h.k}
+                  </dt>
+                  <dd className="mt-1 text-lg font-semibold text-gray-900">
+                    {h.v}
+                  </dd>
                 </div>
-                <p className="text-primary-100 leading-relaxed text-lg">
-                  To provide innovative solutions and make complex business
-                  processes efficient.
-                </p>
-              </div>
-            </div>
-
-            {/* Mission Card */}
-            <div className="relative bg-white border-2 border-primary-200 rounded-2xl p-8 overflow-hidden hover:border-secondary-400 transition-colors duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 rounded-full -mr-16 -mt-16" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-50 rounded-full -ml-12 -mb-12" />
-              <div className="relative z-10">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
-                    <svg
-                      className="w-6 h-6 text-primary-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold text-gray-900">
-                    Our Mission
-                  </h4>
-                </div>
-                <p className="text-gray-700 leading-relaxed">
-                  To become a reliable technology platform that always meets
-                  client expectations. Moreover, with the commitment and
-                  responsibility we have, we want to always be able to provide
-                  solutions to the technology problems our clients face.
-                </p>
-              </div>
-            </div>
+              ))}
+            </dl>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );
