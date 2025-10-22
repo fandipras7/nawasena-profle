@@ -1,144 +1,95 @@
 import React from "react";
 import FadeIn from "./FadeIn";
+import TechBackground from "./TechBackground";
 
-/**
- * About section — revised layout (distinct from Hero)
- * - Centered header
- * - Value cards in a 3‑up row
- * - Split section: horizontal steps timeline (L) + founder note (R)
- * - Compact highlights ledger under it
- * - Removed "Trusted by" block per request
- */
 interface AboutSectionProps {
   eyebrow?: string;
   title?: string;
   description?: string;
-  values?: Array<{ label: string; detail: string }>; // core principles
-  highlights?: Array<{ k: string; v: string }>; // quick stats
+  cards?: Array<{ title: string; content: string }>;
 }
 
 export default function AboutSection({
   eyebrow = "ABOUT",
   title = "We build calmly, ship reliably",
-  description = "Nawasena is a small engineering studio focused on thoughtful web apps and back‑office tools. We obsess over the boring parts—accessibility, states, observability—so your team can move faster with fewer surprises.",
-  values = [
+  description = "Nawasena is a small engineering studio focused on thoughtful web apps and back-office tools. We obsess over the boring parts accessibility, states, observability so your team can move faster with fewer surprises.",
+  cards = [
     {
-      label: "One Team",
-      detail: "We embed with your squad and keep the bus factor high.",
+      title: "Our Vision",
+      content:
+        "Providing innovative solutions and making complex business processes efficient.",
     },
     {
-      label: "One Passion",
-      detail: "Care for craft, tests, docs, and developer experience.",
+      title: "Our Mission",
+      content:
+        "To be a reliable technology partner that consistently meets client expectations. With our commitment and responsibility, we aim to always provide solutions to the technology challenges our clients face.",
     },
-    {
-      label: "One Purpose",
-      detail:
-        "Ship outcomes that matter for the business—quietly and predictably.",
-    },
-  ],
-  highlights = [
-    { k: "Avg. lead time", v: "7–14 days" },
-    { k: "Incidents Q3", v: "0 Sev‑1" },
-    { k: "Core stack", v: "SvelteKit/Next • Nest • PG" },
   ],
 }: AboutSectionProps) {
   return (
     <section id="about" className="relative w-full bg-white py-20 sm:py-24">
-      {/* top hairline */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent" />
+      {/* hairline top rule */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent" />
 
-      <div className="mx-auto max-w-7xl px-6">
-        {/* Header: centered */}
-        <FadeIn>
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary-200/60 bg-primary-50/50 px-3 py-1 text-xs font-medium uppercase tracking-wide text-primary-700">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-secondary-400" />{" "}
-              {eyebrow}
-            </div>
-            <h2 className="mt-4 text-pretty text-3xl font-semibold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
-              {title}
-            </h2>
-            <p className="mx-auto mt-4 max-w-3xl text-balance text-lg leading-8 text-gray-700 sm:text-xl">
-              {description}
-            </p>
-          </div>
-        </FadeIn>
+      {/* Tech Background */}
+      <TechBackground variant="about" intensity="low" />
 
-        {/* Values: 3‑up cards */}
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {values.map((v, index) => (
-            <FadeIn key={v.label} delay={index * 100} direction="up">
-              <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 transition-colors hover:border-secondary-300 hover:bg-white">
-                <div className="text-sm font-semibold text-gray-900">
-                  {v.label}
+      <div className="mx-auto max-w-6xl px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16">
+          {/* Sidebar kiri (sticky) */}
+          <FadeIn>
+            <aside className="md:col-span-5 lg:col-span-4 md:sticky md:top-24 self-start">
+              {/* vertical eyebrow */}
+              <div className="relative mb-6">
+                <div className="absolute -left-6 top-0 h-full w-px bg-gray-200" />
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary-200/60 bg-primary-50/50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-primary-700 md:[writing-mode:vertical-rl] md:rotate-180 md:h-28 md:px-2 md:py-2">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-secondary-400" />
+                  {eyebrow}
                 </div>
-                <p className="mt-1 text-sm text-gray-600">{v.detail}</p>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+                {title}
+              </h2>
+
+              {/* underline accent */}
+              <div className="mt-6 h-1 w-24 bg-linear-to-r from-secondary-300 via-secondary-400 to-transparent rounded-full" />
+            </aside>
+          </FadeIn>
+
+          {/* Content kanan - description dan cards */}
+          <div className="md:col-span-7 lg:col-span-8 md:col-start-6 lg:col-start-5">
+            {/* DESCRIPTION */}
+            <FadeIn delay={80}>
+              <div className="mb-12">
+                <p className="text-gray-700 text-lg sm:text-xl leading-relaxed md:leading-loose">
+                  {description}
+                </p>
               </div>
             </FadeIn>
-          ))}
-        </div>
 
-        {/* Split: horizontal steps + founder note */}
-        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-12">
-          {/* Horizontal steps timeline */}
-          <FadeIn direction="left" delay={100} className="md:col-span-7 lg:col-span-8">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 text-sm font-semibold text-gray-800">
-                How we deliver
-              </div>
-              <ol className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {[
-                  { t: "Discovery", d: "1–3d" },
-                  { t: "Prototype", d: "3–5d" },
-                  { t: "MVP", d: "1–2w" },
-                  { t: "Handover", d: "docs & runbooks" },
-                ].map((s, i) => (
-                  <li
-                    key={i}
-                    className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+            {/* CARDS */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+              {cards.map((card, index) => (
+                <FadeIn key={card.title} delay={index * 120} direction="up">
+                  <article
+                    className={[
+                      index % 2 === 1 ? "sm:mt-10" : "",
+                      "group rounded-2xl border border-gray-200 bg-gray-50 p-7 sm:p-8 transition-all duration-300 hover:border-primary-300 hover:bg-white hover:shadow-md relative overflow-hidden",
+                    ].join(" ")}
                   >
-                    <div className="text-sm font-medium text-gray-900">
-                      {s.t}
-                    </div>
-                    <div className="text-xs text-gray-600">{s.d}</div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </FadeIn>
-
-          {/* Founder note */}
-          <FadeIn direction="right" delay={200} className="md:col-span-5 lg:col-span-4">
-            <div className="rounded-2xl border border-primary-200 bg-primary-50 p-6">
-              <div className="text-sm font-semibold text-primary-900">
-                A note from the team
-              </div>
-              <p className="mt-2 text-sm leading-6 text-gray-700">
-                We prefer clear constraints, small PRs, and strong defaults.
-                When we say "done", it means instrumented, documented, and
-                deployed.
-              </p>
-            </div>
-          </FadeIn>
-        </div>
-
-        {/* Highlights ledger (distinct visual) */}
-        <FadeIn delay={300}>
-          <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6">
-            <dl className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
-              {highlights.map((h) => (
-                <div key={h.k} className="">
-                  <dt className="text-xs uppercase tracking-wide text-gray-500">
-                    {h.k}
-                  </dt>
-                  <dd className="mt-1 text-lg font-semibold text-gray-900">
-                    {h.v}
-                  </dd>
-                </div>
+                    <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-secondary-200/40 blur-2xl group-hover:bg-secondary-300/40 transition" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      {card.title}
+                    </h3>
+                    <p className="text-gray-600 leading-7">{card.content}</p>
+                    <span className="mt-6 block h-px w-16 bg-linear-to-r from-primary-300 to-transparent opacity-60 group-hover:opacity-100" />
+                  </article>
+                </FadeIn>
               ))}
-            </dl>
+            </div>
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );

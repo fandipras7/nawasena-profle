@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import FadeIn from "./FadeIn";
 
 interface ContactInfo {
   email: string;
@@ -15,21 +16,21 @@ interface ContactSectionProps {
 
 export default function ContactSection({
   title = "Get in touch",
-  subtitle = "Two short calls are better than a long RFP. Share your constraints and timeline — we’ll propose a path and estimate.",
+  subtitle = "Two short calls beat a long RFP. Share constraints & timeline — we’ll propose a path and estimate.",
   contactInfo = {
     email: "hello@nawasena.dev",
-    phone: "+62 812‑3456‑7890",
-    address: "Bandung, Indonesia (remote‑first)",
+    phone: "+62 812-3456-7890",
+    address: "Bandung, Indonesia (remote-first)",
     workingHours: "Mon–Fri, 09:00–18:00 WIB",
   },
 }: ContactSectionProps) {
   const subjects = useMemo(
     () => [
-      { v: "web-development", l: "Web Development" },
-      { v: "mobile-development", l: "Mobile Development" },
-      { v: "cloud-solutions", l: "Cloud Solutions" },
-      { v: "data-analytics", l: "Data Analytics" },
-      { v: "consulting", l: "IT Consulting" },
+      { v: "web-development", l: "Web" },
+      { v: "mobile-development", l: "Mobile" },
+      { v: "cloud-solutions", l: "Cloud" },
+      { v: "data-analytics", l: "Data" },
+      { v: "consulting", l: "Consulting" },
       { v: "other", l: "Other" },
     ],
     []
@@ -42,8 +43,7 @@ export default function ContactSection({
     subject: "",
     message: "",
     consent: false,
-    /** Honeypot field to deter bots (hidden visually) */
-    website: "",
+    website: "", // honeypot
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -61,6 +61,9 @@ export default function ContactSection({
     }));
   };
 
+  const setQuickSubject = (v: string) =>
+    setFormData((s) => ({ ...s, subject: v }));
+
   const validate = () => {
     if (
       !formData.name ||
@@ -71,7 +74,7 @@ export default function ContactSection({
       return false;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return false;
     if (!formData.consent) return false;
-    if (formData.website) return false; // honeypot tripped
+    if (formData.website) return false;
     return true;
   };
 
@@ -83,7 +86,6 @@ export default function ContactSection({
     }
     try {
       setIsSubmitting(true);
-      // Example POST — replace with your endpoint
       // const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) });
       // if (!res.ok) throw new Error("Failed");
       await new Promise((r) => setTimeout(r, 900));
@@ -97,7 +99,7 @@ export default function ContactSection({
         consent: false,
         website: "",
       });
-    } catch (e) {
+    } catch {
       setStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -106,30 +108,31 @@ export default function ContactSection({
   };
 
   return (
-    <section id="contact" className="relative w-full bg-white py-20 sm:py-24">
+    <section id="contact" className="relative w-full bg-white py-16 sm:py-20">
       {/* hairline */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary-200 to-transparent" />
 
-      <div className="mx-auto max-w-7xl px-6">
-        {/* Header */}
-        <div className="max-w-3xl">
-          <h2 className="text-pretty text-3xl font-semibold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            {title}
-          </h2>
-          <p className="mt-3 text-lg leading-8 text-gray-700">{subtitle}</p>
-        </div>
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
+        {/* Header (ringkas) */}
+        <FadeIn>
+          <div className="max-w-3xl">
+            <h2 className="text-pretty text-3xl font-semibold leading-tight text-gray-900 sm:text-4xl">
+              {title}
+            </h2>
+            <p className="mt-2 text-base sm:text-lg leading-relaxed text-gray-700">
+              {subtitle}
+            </p>
+          </div>
+        </FadeIn>
 
-        <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
-          {/* Info column */}
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
+          {/* Info compact */}
           <aside className="lg:col-span-4">
-            <div className="space-y-5">
-              <div className="rounded-2xl border border-primary-200 bg-primary-50 p-5">
-                <div className="text-sm font-semibold text-primary-900">
-                  Contact
-                </div>
-                <dl className="mt-3 space-y-3 text-sm">
+            <FadeIn delay={150} direction="left">
+              <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+                <dl className="space-y-3 text-sm">
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-block size-2 rounded-full bg-secondary-400" />
+                    <span className="mt-1 inline-block size-2 rounded-full bg-secondary-400" />
                     <div>
                       <dt className="text-gray-500">Email</dt>
                       <dd className="font-medium text-gray-900">
@@ -138,7 +141,7 @@ export default function ContactSection({
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-block size-2 rounded-full bg-secondary-400" />
+                    <span className="mt-1 inline-block size-2 rounded-full bg-secondary-400" />
                     <div>
                       <dt className="text-gray-500">Phone</dt>
                       <dd className="font-medium text-gray-900">
@@ -147,7 +150,7 @@ export default function ContactSection({
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-block size-2 rounded-full bg-secondary-400" />
+                    <span className="mt-1 inline-block size-2 rounded-full bg-secondary-400" />
                     <div>
                       <dt className="text-gray-500">Address</dt>
                       <dd className="font-medium text-gray-900">
@@ -156,7 +159,7 @@ export default function ContactSection({
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-block size-2 rounded-full bg-secondary-400" />
+                    <span className="mt-1 inline-block size-2 rounded-full bg-secondary-400" />
                     <div>
                       <dt className="text-gray-500">Hours</dt>
                       <dd className="font-medium text-gray-900">
@@ -165,40 +168,73 @@ export default function ContactSection({
                     </div>
                   </div>
                 </dl>
-              </div>
 
-              {/* tiny map / placeholder */}
-              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-                <div className="h-48 w-full bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=Bandung,ID&zoom=10&size=640x320&scale=2')] bg-cover bg-center" />
-                <div className="p-3 text-xs text-gray-600">
-                  Bandung, Indonesia — remote sessions available
+                {/* mini map (subtle) */}
+                <div className="mt-4 overflow-hidden rounded-lg border border-gray-200">
+                  <div className="h-28 w-full bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=Bandung,ID&zoom=11&size=640x240&scale=2')] bg-cover bg-center" />
                 </div>
-              </div>
 
-              <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                <div className="text-sm font-semibold text-gray-900">
-                  Response time
-                </div>
-                <p className="mt-1 text-sm text-gray-600">
-                  We usually reply within{" "}
-                  <span className="font-medium text-gray-900">24 hours</span> on
+                <p className="mt-3 text-xs text-gray-600">
+                  Typical response in{" "}
+                  <span className="font-medium text-gray-900">≤ 24h</span> on
                   business days.
                 </p>
               </div>
-            </div>
+            </FadeIn>
           </aside>
 
-          {/* Form */}
+          {/* Form compact */}
           <div className="lg:col-span-8">
+            <FadeIn delay={300} direction="right">
             <form
               onSubmit={handleSubmit}
-              className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+              className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 sm:p-6"
             >
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {/* Quick subject chips */}
+              <div>
+                <div className="mb-2 block text-sm font-medium text-gray-700">
+                  Subject *
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {subjects.map((s) => (
+                    <button
+                      type="button"
+                      key={s.v}
+                      onClick={() => setQuickSubject(s.v)}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        formData.subject === s.v
+                          ? "border-primary-300 bg-primary-50 text-primary-800"
+                          : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                      }`}
+                      aria-pressed={formData.subject === s.v}
+                    >
+                      {s.l}
+                    </button>
+                  ))}
+                </div>
+                {/* fallback select for accessibility / keyboard */}
+                <select
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={onChange}
+                  required
+                  className="sr-only"
+                >
+                  <option value="">Select a subject</option>
+                  {subjects.map((s) => (
+                    <option key={s.v} value={s.v}>
+                      {s.l}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-700"
+                    className="mb-1.5 block text-sm font-medium text-gray-700"
                   >
                     Full name *
                   </label>
@@ -209,7 +245,7 @@ export default function ContactSection({
                     value={formData.name}
                     onChange={onChange}
                     required
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
                     placeholder="Your full name"
                     autoComplete="name"
                   />
@@ -217,7 +253,7 @@ export default function ContactSection({
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-700"
+                    className="mb-1.5 block text-sm font-medium text-gray-700"
                   >
                     Email address *
                   </label>
@@ -228,15 +264,15 @@ export default function ContactSection({
                     value={formData.email}
                     onChange={onChange}
                     required
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
                     placeholder="your@email.com"
                     autoComplete="email"
                   />
                 </div>
-                <div>
+                <div className="md:col-span-2">
                   <label
                     htmlFor="company"
-                    className="mb-2 block text-sm font-medium text-gray-700"
+                    className="mb-1.5 block text-sm font-medium text-gray-700"
                   >
                     Company
                   </label>
@@ -246,40 +282,17 @@ export default function ContactSection({
                     type="text"
                     value={formData.company}
                     onChange={onChange}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
                     placeholder="Optional"
                     autoComplete="organization"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Subject *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={onChange}
-                    required
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
-                  >
-                    <option value="">Select a subject</option>
-                    {subjects.map((s) => (
-                      <option key={s.v} value={s.v}>
-                        {s.l}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-4">
                 <label
                   htmlFor="message"
-                  className="mb-2 block text-sm font-medium text-gray-700"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
                 >
                   Message *
                 </label>
@@ -289,9 +302,9 @@ export default function ContactSection({
                   value={formData.message}
                   onChange={onChange}
                   required
-                  rows={6}
-                  className="w-full resize-y rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
-                  placeholder="Tell us about your project, goals, constraints, and timeline"
+                  rows={5}
+                  className="w-full resize-y rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-secondary-400 focus:outline-none focus:ring-2 focus:ring-secondary-200"
+                  placeholder="Tell us about goals, constraints, and timeline"
                 />
               </div>
 
@@ -303,12 +316,12 @@ export default function ContactSection({
                   type="checkbox"
                   checked={formData.consent}
                   onChange={onChange}
-                  className="mt-1 size-4 rounded border-gray-300 text-primary-700 focus:ring-primary-700"
+                  className="mt-0.5 size-4 rounded border-gray-300 text-primary-700 focus:ring-primary-700"
                   required
                 />
                 <label htmlFor="consent" className="text-sm text-gray-700">
                   I agree that Nawasena may contact me about this inquiry. We’ll
-                  keep your info private and never share it.
+                  keep your info private.
                 </label>
               </div>
               <div aria-hidden className="hidden">
@@ -323,11 +336,11 @@ export default function ContactSection({
               </div>
 
               {/* Submit */}
-              <div className="mt-6">
+              <div className="mt-5">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition-all ${
+                  className={`inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all ${
                     isSubmitting
                       ? "bg-gray-400"
                       : "bg-primary-700 hover:-translate-y-0.5 hover:bg-primary-800 shadow-sm"
@@ -380,6 +393,7 @@ export default function ContactSection({
                 </div>
               )}
             </form>
+          </FadeIn>
           </div>
         </div>
       </div>

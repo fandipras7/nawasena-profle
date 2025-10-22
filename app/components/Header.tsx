@@ -28,10 +28,13 @@ export default function Header({
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 bg-primary-900 text-white transition-shadow ${
-        scrolled ? "shadow-[0_2px_10px_rgba(0,0,0,0.25)]" : "shadow-none"
+      className={`fixed inset-x-0 top-0 z-50 bg-primary-900/95 backdrop-blur-sm text-white transition-all duration-300 ${
+        scrolled ? "shadow-[0_8px_30px_rgba(19,36,71,0.2)] bg-primary-900/98" : "shadow-none"
       }`}
     >
+      {/* Hairline bottom border when scrolled */}
+      <div className={`absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-primary-700 to-transparent transition-opacity duration-300 ${scrolled ? "opacity-100" : "opacity-0"}`} />
+      
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <a

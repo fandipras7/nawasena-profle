@@ -1,5 +1,4 @@
 import Header from "../components/Header";
-import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import ServicesSection from "../components/ServicesSection";
 import PortfolioSection from "../components/PortfolioSection";
@@ -9,6 +8,8 @@ import Footer from "../components/Footer";
 import ScrollReveal from "../components/ScrollReveal";
 import SEO, { companyStructuredData } from "../components/SEO";
 import PerformanceMonitor from "../components/PerformanceMonitor";
+import HeroSection from "~/components/HeroSection";
+import ConnectedBackground from "~/components/ConnectedBackground";
 
 export function meta() {
   return [
@@ -27,11 +28,15 @@ export function meta() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <SEO structuredData={companyStructuredData} />
       <PerformanceMonitor />
+      
+      {/* Connected background animation */}
+      <ConnectedBackground />
+      
       <Header />
-      <main>
+      <main className="relative z-10">
         <HeroSection />
         <AboutSection />
         <ServicesSection />

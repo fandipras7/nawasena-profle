@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 interface FooterProps {
   companyName?: string;
   companyDescription?: string;
@@ -7,7 +9,12 @@ export default function Footer({
   companyName = "PT. Nawasena Kreasi Teknologi",
   companyDescription = "Innovative, reliable, and human-centered tech solutions."
 }: FooterProps) {
-  const year = new Date().getFullYear();
+  // Use client-side state to avoid hydration mismatch
+  const [year, setYear] = useState(2024);
+  
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   const links = {
     product: [
@@ -35,14 +42,22 @@ export default function Footer({
   ];
 
   return (
-    <footer className="bg-primary-800 text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="relative bg-primary-800 text-white overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(240,180,41,0.05),transparent)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(53,91,166,0.1),transparent)] pointer-events-none" />
+      
+      {/* Top hairline */}
+      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary-600 to-transparent" />
+      
+      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Top */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Brand */}
-          <div>
-            <h3 className="text-xl font-bold">{companyName}</h3>
-            <p className="mt-3 text-primary-100 leading-relaxed">
+          <div className="relative">
+            <h3 className="text-xl font-bold text-white">{companyName}</h3>
+            <div className="mt-2 h-px w-16 bg-linear-to-r from-secondary-400 to-transparent" />
+            <p className="mt-4 text-primary-100/90 leading-relaxed text-sm max-w-sm">
               {companyDescription}
             </p>
 
@@ -52,9 +67,13 @@ export default function Footer({
                   key={s.name}
                   href={s.href}
                   aria-label={s.name}
-                  className="inline-flex items-center justify-center w-9 h-9 rounded-md bg-primary-700 hover:bg-secondary-500 transition-colors"
+                  className="group relative inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary-700/60 backdrop-blur-sm hover:bg-secondary-500 transition-all duration-300 border border-primary-600/40 hover:border-secondary-400/60 hover:shadow-lg hover:shadow-secondary-500/20"
                 >
-                  {s.svg}
+                  <span className="relative z-10 transition-transform group-hover:scale-110">
+                    {s.svg}
+                  </span>
+                  {/* Hover gradient overlay */}
+                  <div className="absolute inset-0 rounded-xl bg-linear-to-br from-secondary-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
               ))}
             </div>
@@ -62,12 +81,14 @@ export default function Footer({
 
           {/* Links: Product */}
           <div>
-            <h4 className="text-sm font-semibold tracking-wide text-secondary-400">PRODUCT</h4>
-            <ul className="mt-4 space-y-2">
+            <h4 className="text-sm font-semibold tracking-wide text-secondary-400 mb-1">PRODUCT</h4>
+            <div className="h-px w-8 bg-linear-to-r from-secondary-400 to-transparent mb-3" />
+            <ul className="mt-4 space-y-3">
               {links.product.map((l) => (
                 <li key={l.name}>
-                  <a href={l.href} className="text-primary-100 hover:text-white transition-colors">
-                    {l.name}
+                  <a href={l.href} className="text-primary-100/90 hover:text-white transition-colors duration-200 text-sm relative group">
+                    <span className="relative z-10">{l.name}</span>
+                    <span className="absolute bottom-0 left-0 h-px w-0 bg-secondary-400 transition-all duration-200 group-hover:w-full" />
                   </a>
                 </li>
               ))}
@@ -76,12 +97,14 @@ export default function Footer({
 
           {/* Links: Company */}
           <div>
-            <h4 className="text-sm font-semibold tracking-wide text-secondary-400">COMPANY</h4>
-            <ul className="mt-4 space-y-2">
+            <h4 className="text-sm font-semibold tracking-wide text-secondary-400 mb-1">COMPANY</h4>
+            <div className="h-px w-8 bg-linear-to-r from-secondary-400 to-transparent mb-3" />
+            <ul className="mt-4 space-y-3">
               {links.company.map((l) => (
                 <li key={l.name}>
-                  <a href={l.href} className="text-primary-100 hover:text-white transition-colors">
-                    {l.name}
+                  <a href={l.href} className="text-primary-100/90 hover:text-white transition-colors duration-200 text-sm relative group">
+                    <span className="relative z-10">{l.name}</span>
+                    <span className="absolute bottom-0 left-0 h-px w-0 bg-secondary-400 transition-all duration-200 group-hover:w-full" />
                   </a>
                 </li>
               ))}
@@ -89,16 +112,19 @@ export default function Footer({
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="mt-10 h-px bg-primary-700" />
+        {/* Divider with gradient */}
+        <div className="mt-10 relative">
+          <div className="absolute inset-0 h-px bg-linear-to-r from-transparent via-primary-600 to-transparent" />
+          <div className="absolute left-1/2 top-0 h-px w-32 bg-linear-to-r from-transparent via-secondary-400/40 to-transparent transform -translate-x-1/2" />
+        </div>
 
         {/* Bottom */}
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-sm text-primary-200">© {year} {companyName}. All rights reserved.</p>
+          <p className="text-sm text-primary-200/80">© {year} {companyName}. All rights reserved.</p>
           <div className="flex items-center gap-4 text-sm">
-            <a href="#" className="text-primary-200 hover:text-white transition-colors">Privacy</a>
-            <span className="text-primary-600">•</span>
-            <a href="#" className="text-primary-200 hover:text-white transition-colors">Terms</a>
+            <a href="#" className="text-primary-200/80 hover:text-white transition-colors duration-200 hover:underline underline-offset-4">Privacy</a>
+            <span className="text-primary-600/60">•</span>
+            <a href="#" className="text-primary-200/80 hover:text-white transition-colors duration-200 hover:underline underline-offset-4">Terms</a>
           </div>
         </div>
       </div>
