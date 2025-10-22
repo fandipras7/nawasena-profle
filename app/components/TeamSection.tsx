@@ -30,8 +30,7 @@ export default function TeamSection({
       position: "Chief Executive Officer",
       description:
         "Product-led CEO focusing on clarity of vision and sustainable growth.",
-      image:
-        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=1200&auto=format&fit=crop",
+      image: "https://via.placeholder.com/400x400/6366f1/ffffff?text=NA",
       skills: ["Business Strategy", "GTM", "Partnerships", "Leadership"],
       social: { linkedin: "#", twitter: "#" },
     },

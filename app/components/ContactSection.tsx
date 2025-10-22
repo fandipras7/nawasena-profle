@@ -18,9 +18,9 @@ export default function ContactSection({
   title = "Get in touch",
   subtitle = "Two short calls beat a long RFP. Share constraints & timeline — we’ll propose a path and estimate.",
   contactInfo = {
-    email: "hello@nawasena.dev",
-    phone: "+62 812-3456-7890",
-    address: "Bandung, Indonesia (remote-first)",
+    email: "nitasseptiani@nawasena.tech",
+    phone: "+62 856-4903-0832",
+    address: "Jakarta, Indonesia (remote-first)",
     workingHours: "Mon–Fri, 09:00–18:00 WIB",
   },
 }: ContactSectionProps) {
